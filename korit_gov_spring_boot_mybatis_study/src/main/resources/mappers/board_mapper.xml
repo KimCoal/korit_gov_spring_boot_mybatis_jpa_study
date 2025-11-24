@@ -19,4 +19,14 @@
     <select id="getBoardList" resultMap="BoardResultMap">
         select * from board_tb;
     </select>
+    <select id="getBoardByBoardId" resultMap="BoardResultMap">
+        select * from board_tb where board_id = #{boardId};
+    </select>
+    <update id="editBoard">
+        update board_tb set title = #{title}, content = #{content}, update_dt = now()
+        where board_id = #{boardId};
+    </update>
+    <delete id="deleteBoard">
+        delete from board_tb where board_id = #{boardId};
+    </delete>
 </mapper>

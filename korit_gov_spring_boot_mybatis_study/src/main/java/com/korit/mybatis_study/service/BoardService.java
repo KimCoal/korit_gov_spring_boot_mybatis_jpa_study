@@ -2,6 +2,7 @@ package com.korit.mybatis_study.service;
 
 import com.korit.mybatis_study.dto.AddBoardReqDto;
 import com.korit.mybatis_study.dto.ApiRespDto;
+import com.korit.mybatis_study.dto.EditBoardReqDto;
 import com.korit.mybatis_study.entity.Board;
 import com.korit.mybatis_study.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,36 @@ public class BoardService {
 
     public ApiRespDto<?> getBoardList() {
         return new ApiRespDto<>("success", "전체 조회 완료", boardRepository.getBoardList());
+    }
+
+    public ApiRespDto<?> getBoardByBoardId(Integer boardId) {
+        return new ApiRespDto<>("success", "조회 완료", boardRepository.getBoardByBoardId(boardId));
+    }
+
+    public ApiRespDto<?> editBoard(EditBoardReqDto editBoardReqDto) {
+        // 해당 board가 존재하는지 확인
+        Optional<Board> foundBoard = boardRepository.getBoardByBoardId(editBoardReqDto.getBoardId());
+        if (foundBoard.isEmpty()) {
+            return new ApiRespDto<>("failed", "해당 게시물이 존재하지 않습니다", null);
+        }
+        // 있으면 수정을 진행
+        int result = boardRepository.editBoard(editBoardReqDto.toEntity());
+        if (result != 1) {
+            return new ApiRespDto<>("failed", "수정 실패", null);
+        }
+        return new ApiRespDto<>("success", "수정 성공", null);
+
+    }
+
+    public ApiRespDto<?> deleteBoard(Integer boardId) {
+        Optional<Board> foundBoard = boardRepository.getBoardByBoardId(boardId);
+        if (foundBoard.isEmpty()) {
+            return new ApiRespDto<>("failed", "해당 게시물이 존재하지 않습니다", null);
+        }
+        int result = boardRepository.deleteBoard(boardId);
+        if (result != 1) {
+            return new ApiRespDto<>("failed", "게시물을 삭제하는데 문제가 발생", null);
+        }
+        return new ApiRespDto<>("seccess", "삭제 성공", null);
     }
 }

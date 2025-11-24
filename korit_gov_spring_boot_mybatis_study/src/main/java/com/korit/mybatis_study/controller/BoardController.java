@@ -1,6 +1,7 @@
 package com.korit.mybatis_study.controller;
 
 import com.korit.mybatis_study.dto.AddBoardReqDto;
+import com.korit.mybatis_study.dto.EditBoardReqDto;
 import com.korit.mybatis_study.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,20 @@ public class BoardController {
     @GetMapping("/all")
     public ResponseEntity<?> getBoardList() {
         return ResponseEntity.ok(boardService.getBoardList());
+    }
+
+    @GetMapping("/{boardId}")
+    public ResponseEntity<?> getBoardByBoardId(@PathVariable Integer boardId) {
+        return ResponseEntity.ok(boardService.getBoardByBoardId(boardId));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> editBoard(@RequestBody EditBoardReqDto editBoardReqDto) {
+        return ResponseEntity.ok(boardService.editBoard(editBoardReqDto));
+    }
+
+    @PostMapping("/remove")
+    public ResponseEntity<?> deleteBoard(@RequestParam Integer boardId) {
+        return ResponseEntity.ok(boardService.deleteBoard(boardId));
     }
 }

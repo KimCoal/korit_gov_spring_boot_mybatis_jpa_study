@@ -11,4 +11,7 @@ public interface BoardMapper {
     Optional<Board> findBoardByTitle(String title);
     int addBoard(Board board);
     List<Board> getBoardList();
+    Optional<Board> getBoardByBoardId(Integer boardId);
+    int editBoard(Board board);
+    int deleteBoard(Integer boardId);
 }

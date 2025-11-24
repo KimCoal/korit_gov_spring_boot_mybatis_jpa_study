@@ -31,4 +31,16 @@ public class BoardRepository {
     public List<Board> getBoardList() {
         return boardMapper.getBoardList();
     }
+
+    public Optional<Board> getBoardByBoardId(Integer boardId) {
+        return boardMapper.getBoardByBoardId(boardId);
+    }
+
+    public int editBoard(Board board) {
+        return boardMapper.editBoard(board);
+    }
+
+    public int deleteBoard(Integer boardId) {
+        return boardMapper.deleteBoard(boardId);
+    }
 }
