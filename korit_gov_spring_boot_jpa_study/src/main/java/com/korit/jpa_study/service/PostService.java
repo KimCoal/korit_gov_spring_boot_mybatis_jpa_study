@@ -4,9 +4,9 @@ import com.korit.jpa_study.dto.AddPostReqDto;
 import com.korit.jpa_study.dto.ApiRespDto;
 import com.korit.jpa_study.dto.EditPostReqDto;
 import com.korit.jpa_study.entity.Post;
+import com.korit.jpa_study.entity.User;
 import com.korit.jpa_study.repository.PostRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.springframework.beans.factory.ObjectProvider;
+import com.korit.jpa_study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +19,19 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public ApiRespDto<?> addPost(AddPostReqDto addPostReqDto) {
+        Optional<User> foundUser = userRepository.findUserByUserId(addPostReqDto.getUserId());
+        if (foundUser.isEmpty()) {
+            return new ApiRespDto<>("failed", "존재하지 않음", null);
+        }
         Optional<Post> foundPost = postRepository.findPostByTitle(addPostReqDto.getTitle());
         if (foundPost.isPresent()) {
             return new ApiRespDto<>("failed", "추가실패", addPostReqDto.getTitle());
         }
+        
         return new ApiRespDto<>("success", "추가성공", postRepository.save(addPostReqDto.toEntity()));
     }
 

@@ -30,10 +30,18 @@ public class UserService {
     }
 
     public ApiRespDto<?> getUserByUserId(Integer userId) {
+        Optional<User> foundUser = userRepository.findUserByUserId(userId);
+        if (foundUser.isEmpty()) {
+            return new ApiRespDto<>("failed", "정보없음", userId);
+        }
         return new ApiRespDto<>("success", "조회성공", userRepository.findUserByUserId(userId));
     }
 
     public ApiRespDto<?> getUserByUsername(String username) {
+        Optional<User> foundUser = userRepository.findUserByUsername(username);
+        if (foundUser.isEmpty()) {
+            return new ApiRespDto<>("failed", "정보없음", username);
+        }
         return new ApiRespDto<>("success", "조회성공", userRepository.findUserByUsername(username));
     }
 
@@ -45,6 +53,7 @@ public class UserService {
         User user = foundUser.get();
         user.setUsername(editUserReqDto.getUsername());
         user.setPassword(editUserReqDto.getPassword());
+        user.setEmail(editUserReqDto.getEmail());
         user.setUpdateDt(LocalDateTime.now());
         User updateUser = userRepository.save(user);
         return new ApiRespDto<>("success", "조회성공", updateUser);
